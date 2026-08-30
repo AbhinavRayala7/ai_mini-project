@@ -1,6 +1,8 @@
 import os
+import io
 import json
 import sqlite3
+import pypdf
 import numpy as np
 from typing import List, Optional
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Header
@@ -101,10 +103,25 @@ async def upload_document(
     
     # Read content
     contents = await file.read()
-    try:
-        text = contents.decode("utf-8")
-    except UnicodeDecodeError:
-        raise HTTPException(status_code=400, detail="Only UTF-8 encoded text/markdown files are supported in this version.")
+    filename_lower = file.filename.lower()
+    
+    text = ""
+    if filename_lower.endswith(".pdf"):
+        try:
+            pdf_reader = pypdf.PdfReader(io.BytesIO(contents))
+            text_parts = []
+            for page in pdf_reader.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    text_parts.append(page_text)
+            text = "\n".join(text_parts)
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Failed to parse PDF: {str(e)}")
+    else:
+        try:
+            text = contents.decode("utf-8")
+        except UnicodeDecodeError:
+            raise HTTPException(status_code=400, detail="Unsupported format. Please upload PDF or UTF-8 text/markdown.")
 
     # Insert Document
     conn = sqlite3.connect(DB_PATH)

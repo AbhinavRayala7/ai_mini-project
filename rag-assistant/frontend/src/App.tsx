@@ -253,7 +253,7 @@ function App() {
               type="file" 
               ref={fileInputRef} 
               className="hidden-file-input" 
-              accept=".txt,.md,.json,.csv"
+              accept=".txt,.md,.json,.csv,.pdf"
               disabled={isUploading}
               onChange={handleFileUpload} 
             />
