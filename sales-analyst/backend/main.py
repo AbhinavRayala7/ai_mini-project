@@ -131,7 +131,7 @@ User Question: {request.query}
 Write the code now:"""
 
     try:
-        model = client.GenerativeModel("gemini-1.5-flash")
+        model = client.GenerativeModel("gemini-2.5-flash")
         response = model.generate_content(code_generation_prompt)
         python_code = response.text.replace("```python", "").replace("```", "").strip()
     except Exception as e:
