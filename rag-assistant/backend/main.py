@@ -127,7 +127,7 @@ async def upload_document(
     # Embed chunks using Gemini API
     try:
         response = client.embed_content(
-            model="models/text-embedding-004",
+            model="models/embedding-001",
             content=chunks,
             task_type="retrieval_document"
         )
@@ -178,7 +178,7 @@ async def query_knowledge_base(
     # Embed query
     try:
         response = client.embed_content(
-            model="models/text-embedding-004",
+            model="models/embedding-001",
             content=request.query,
             task_type="retrieval_query"
         )
