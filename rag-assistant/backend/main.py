@@ -225,7 +225,7 @@ Question: {request.query}
 Answer:"""
 
     try:
-        model = client.GenerativeModel("gemini-2.5-flash")
+        model = client.GenerativeModel("gemini-3.6-flash")
         generation = model.generate_content(prompt)
         answer = generation.text
     except Exception as e:
